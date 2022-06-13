@@ -91,7 +91,8 @@ jobs:
       #   # This step uses the identity token to provision an ephemeral certificate
       #   # against the sigstore community Fulcio instance.
         # run: cosign sign ${{ steps.meta.outputs.tags }}@${{ steps.build-and-push.outputs.digest }}
-      - name:  publish to github
+
+      - name:  publish to github - build
         id: build
         uses: jerray/publish-docker-action@master
         with:
@@ -101,6 +102,7 @@ jobs:
           repository: akatkova/devops-group-ak
           auto_tag: true
 
+      - name:  publish to github - deploy
         id: deploy
         env:
           NEW_VERSION: ${{ steps.build.outputs.tag }}
