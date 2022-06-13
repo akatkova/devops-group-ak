@@ -22,9 +22,7 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v2
         with:
           images: akatkova/devops_group
-          tags: |
-            type=raw,value=latest,enable=${{ endsWith(github.ref, 'master') }}
-            type=ref,event=tag
+          tags: ['v*.*.*']
           flavor: |
             latest=false
 
@@ -49,4 +47,3 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: akatkova/devops_group
-          
