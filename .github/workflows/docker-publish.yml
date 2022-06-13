@@ -83,7 +83,7 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@v4
         with:
           name: myDocker/repository
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
       # Sign the resulting Docker image digest except on PRs.
