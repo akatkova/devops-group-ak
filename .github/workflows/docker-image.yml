@@ -9,9 +9,9 @@ on:
     branches:
       - 'master'
 
-
-REGISTRY: ghcr.io
-IMAGE_NAME: akatkova/devops_group
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: akatkova/devops_group
 
 jobs:
   build:
