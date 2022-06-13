@@ -51,7 +51,7 @@ jobs:
 	          type=semver,pattern={{major}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
-          labels: ${{ env.REGISTRY }}/${{ github.actor }}:${{ github.run_id }}
+    
 
       - name: Build and push Docker image
         id: build-and-push
