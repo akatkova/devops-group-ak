@@ -57,7 +57,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: [${{ steps.meta.outputs.tags }}, ${{ env.REGISTRY }}/${{ github.actor }}:${{ github.run_id }} ]
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64,linux/arm
           cache-from: type=gha
