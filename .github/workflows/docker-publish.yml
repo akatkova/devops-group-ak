@@ -82,7 +82,7 @@ jobs:
         # pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
         uses: elgohr/Publish-Docker-Github-Action@v4
         with:
-          name: myDocker/repository
+          name: ${{ env.IMAGE_NAME }}
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
