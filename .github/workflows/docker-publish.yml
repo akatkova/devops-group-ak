@@ -92,7 +92,7 @@ jobs:
       #   # against the sigstore community Fulcio instance.
         # run: cosign sign ${{ steps.meta.outputs.tags }}@${{ steps.build-and-push.outputs.digest }}
       - name:  publish to github
-      - id: build
+        id: build
         uses: jerray/publish-docker-action@master
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -101,7 +101,7 @@ jobs:
           repository: akatkova/devops-group-ak
           auto_tag: true
 
-      - id: deploy
+        id: deploy
         env:
           NEW_VERSION: ${{ steps.build.outputs.tag }}
         run: |
