@@ -86,8 +86,7 @@ jobs:
           name: ${{ env.IMAGE_NAME }}
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          # tags: latest
-          tag_semver: true
+          tags: latest, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_id }}
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
       # repository is public to avoid leaking data.  If you would like to publish
