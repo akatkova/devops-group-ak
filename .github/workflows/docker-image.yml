@@ -9,41 +9,54 @@ on:
     branches:
       - 'master'
 
+
+REGISTRY: ghcr.io
+IMAGE_NAME: akatkova/devops_group
+
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Docker meta
-        id: meta
-        uses: crazy-max/ghaction-docker-meta@v2
-        with:
-          images: akatkova/devops_group
-          tags: ['v*.*.*']
-          flavor: |
-            latest=false
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Login to DockerHub
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log into registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+            type=ref,event=branch
+            type=ref,event=tag
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v2 
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Update repo description
-        uses: peter-evans/dockerhub-description@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: akatkova/devops_group
+          platforms: linux/amd64,linux/arm64,linux/arm
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
